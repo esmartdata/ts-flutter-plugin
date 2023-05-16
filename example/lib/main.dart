@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:ts_flutter_plugin/model/init_data.dart';
 import 'package:ts_flutter_plugin/ts_flutter_plugin.dart';
+import 'package:ts_flutter_plugin/ts_navigator_observer.dart';
 
 void main() {
   runApp(const MyApp());
@@ -46,6 +47,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorObservers: [TSNavigatorObserver()],
       home: Scaffold(
         appBar: AppBar(
           title: const Text('Plugin example app'),
