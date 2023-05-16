@@ -29,14 +29,14 @@ class MethodChannelTsFlutterPlugin extends TsFlutterPluginPlatform {
   @override
   Future<bool?> setUserInfo(UserInfo userInfo) async {
     return await methodChannel.invokeMethod<bool>(
-        'initSDK', userInfo.toString());
+        'setUserInfo', userInfo.toString());
   }
 
   @override
   Future<bool?> event(
       String eventName, Map<dynamic, dynamic> properties) async {
     return await methodChannel
-        .invokeMethod<bool>('initSDK', [eventName, properties]);
+        .invokeMethod<bool>('event', [eventName, properties]);
   }
 
   @override
@@ -48,6 +48,6 @@ class MethodChannelTsFlutterPlugin extends TsFlutterPluginPlatform {
 
   @override
   Future<bool?> eventViewPageStop() async {
-    return await methodChannel.invokeMethod<bool>('eventViewScreenStop');
+    return await methodChannel.invokeMethod<bool>('eventViewPageStop');
   }
 }
