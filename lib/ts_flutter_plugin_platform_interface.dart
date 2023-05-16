@@ -1,5 +1,7 @@
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
+import 'model/init_data.dart';
+import 'model/user_info.dart';
 import 'ts_flutter_plugin_method_channel.dart';
 
 abstract class TsFlutterPluginPlatform extends PlatformInterface {
@@ -25,5 +27,26 @@ abstract class TsFlutterPluginPlatform extends PlatformInterface {
 
   Future<String?> getPlatformVersion() {
     throw UnimplementedError('platformVersion() has not been implemented.');
+  }
+
+  Future<bool?> initSDK(InitData initData) async {
+    throw UnimplementedError('initSDK() has not been implemented.');
+  }
+
+  Future<bool?> setUserInfo(UserInfo userInfo) async {
+    throw UnimplementedError('setUserInfo() has not been implemented.');
+  }
+
+  Future<bool?> event(
+      String eventName, Map<dynamic, dynamic> properties) async {
+    throw UnimplementedError('event() has not been implemented.');
+  }
+
+  Future<bool?> eventViewPage(String viewName, dynamic arguments) async {
+    throw UnimplementedError('eventViewPage() has not been implemented.');
+  }
+
+  Future<bool?> eventViewPageStop() async {
+    throw UnimplementedError('eventViewPageStop() has not been implemented.');
   }
 }

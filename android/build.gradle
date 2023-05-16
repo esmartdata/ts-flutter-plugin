@@ -34,8 +34,7 @@ android {
     }
 
     dependencies {
-        testImplementation 'junit:junit:4.13.2'
-        testImplementation 'org.mockito:mockito-core:5.0.0'
+        implementation 'com.esmartwave.analytics.androidsdk:TrackingSystemSDK:2.0.4'
     }
 
     testOptions {
