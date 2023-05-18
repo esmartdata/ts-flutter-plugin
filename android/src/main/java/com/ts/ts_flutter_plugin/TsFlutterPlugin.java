@@ -25,11 +25,15 @@ import io.flutter.plugin.common.MethodChannel.Result;
 
 public class TsFlutterPlugin implements FlutterPlugin, MethodCallHandler {
 
+    private String TAG = "TsFlutterPlugin";
+
     private Context context;
 
     private MethodChannel channel;
 
     private boolean init = false;
+
+    private boolean debug = false;
 
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
@@ -40,7 +44,6 @@ public class TsFlutterPlugin implements FlutterPlugin, MethodCallHandler {
 
     @Override
     public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
-        String TAG = "TsFlutterPlugin";
         switch (call.method) {
             case "getPlatformVersion":
                 result.success("Android " + android.os.Build.VERSION.RELEASE);
@@ -78,7 +81,7 @@ public class TsFlutterPlugin implements FlutterPlugin, MethodCallHandler {
         try {
             JSONObject jsonObject = new JSONObject((String) object);
             String appKey = jsonObject.getString("appKey");
-            boolean debug = jsonObject.getBoolean("debug");
+            debug = jsonObject.getBoolean("debug");
             String tsApp = jsonObject.getString("tsApp");
             String tsExt = jsonObject.getString("tsExt");
             String serverUrl = jsonObject.getString("serverUrl");
