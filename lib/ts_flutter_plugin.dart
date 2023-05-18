@@ -9,14 +9,17 @@ class TsFlutterPlugin {
     return tsFlutterPluginPlatform.getPlatformVersion();
   }
 
+  /// 初始化SDK
   Future<bool?> initSDK(InitData initData) async {
     return tsFlutterPluginPlatform.initSDK(initData);
   }
 
+  /// 设置用户属性
   Future<bool?> setUserInfo(UserInfo userInfo) async {
     return tsFlutterPluginPlatform.setUserInfo(userInfo);
   }
 
+  /// 打点
   Future<bool?> event(
       String eventName, Map<dynamic, dynamic> properties) async {
     return tsFlutterPluginPlatform.event(eventName, properties);
