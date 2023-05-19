@@ -46,6 +46,7 @@ class _MyAppState extends State<MyApp> {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
+      /// 监测路由事件
       navigatorObservers: [TSNavigatorObserver()],
       routes: {
         '/': (context) => const HomePage(),
