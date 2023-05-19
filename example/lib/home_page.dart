@@ -31,18 +31,6 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           children: [
             ElevatedButton(
-              child: const Text("初始化SDK"),
-              onPressed: () async {
-                // ios qa1676530871259 android qa1684135668676  正式 ts1684140512952
-                InitData initData = InitData("ts1684140512952", true, "tsApp",
-                    "tsExt", "https://tsapiqa.escase.cn/collection/i", true);
-                bool? result = await _tsFlutterPlugin.initSDK(initData);
-                if (kDebugMode) {
-                  print("初始化结果:$result");
-                }
-              },
-            ),
-            ElevatedButton(
               child: const Text("用户属性"),
               onPressed: () async {
                 bool? result = await _tsFlutterPlugin.setUserInfo(UserInfo(

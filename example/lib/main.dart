@@ -1,4 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:ts_flutter_plugin/model/init_data.dart';
+import 'package:ts_flutter_plugin/ts_flutter_plugin.dart';
 
 import 'package:ts_flutter_plugin/ts_navigator_observer.dart';
 
@@ -10,8 +13,30 @@ void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final _tsFlutterPlugin = TsFlutterPlugin();
+
+  @override
+  void initState() {
+    super.initState();
+    initSDK();
+  }
+
+  Future<void> initSDK() async {
+    InitData initData = InitData("ts1684140512952", true, "tsApp", "tsExt",
+        "https://tsapiqa.escase.cn/collection/i", true);
+    bool? result = await _tsFlutterPlugin.initSDK(initData);
+    if (kDebugMode) {
+      print("初始化结果:$result");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
