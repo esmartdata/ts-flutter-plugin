@@ -23,6 +23,7 @@ class TSNavigatorObserver extends NavigatorObserver {
 
     if (route.settings.name != null) {
       if (pages.isEmpty) {
+        tsFlutterPluginPlatform.event("应用启动", {});
         pages.add(route.settings.name!);
         tsFlutterPluginPlatform.eventViewPage(pages.last, arguments);
       } else if (previousRoute?.settings.name != null &&
