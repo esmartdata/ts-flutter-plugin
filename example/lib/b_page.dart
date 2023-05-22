@@ -18,9 +18,9 @@ class _BPageState extends State<BPage> {
       ),
       body: Center(
         child: ElevatedButton(
-          child: const Text("CPage带参数跳转\n{\"key1\": \"value1\"}"),
+          child: const Text("Replace CPage 带参数\n{\"key1\": \"value1\"}"),
           onPressed: () {
-            Navigator.pushNamed(context, "/c_page", arguments: {"key": "value"});
+            Navigator.pushReplacementNamed(context, "/c_page", arguments: {"key": "value"});
           },
         ),
       ),

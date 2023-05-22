@@ -15,8 +15,13 @@ class _CPageState extends State<CPage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: const Text("C Page"),
       ),
-      body: const Center(
-        child: Text("C Page"),
+      body: Center(
+        child: ElevatedButton(
+          child: const Text("push DPage"),
+          onPressed: () {
+            Navigator.pushNamed(context, "/d_page");
+          },
+        ),
       ),
     );
   }

@@ -7,6 +7,7 @@ import 'package:ts_flutter_plugin/ts_navigator_observer.dart';
 
 import 'b_page.dart';
 import 'c_page.dart';
+import 'd_page.dart';
 import 'home_page.dart';
 
 void main() {
@@ -52,6 +53,7 @@ class _MyAppState extends State<MyApp> {
         '/': (context) => const HomePage(),
         '/b_page': (context) => const BPage(),
         '/c_page': (context) => const CPage(),
+        '/d_page': (context) => const DPage(),
       },
     );
   }

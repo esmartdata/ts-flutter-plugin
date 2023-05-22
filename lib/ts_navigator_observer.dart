@@ -47,8 +47,8 @@ class TSNavigatorObserver extends NavigatorObserver {
         pages.isNotEmpty &&
         route.settings.name == pages.last) {
       pages.removeLast();
-      tsFlutterPluginPlatform.eventViewPageStop();
       if (pages.isNotEmpty) {
+        tsFlutterPluginPlatform.eventViewPageStop();
         tsFlutterPluginPlatform.eventViewPage(pages.last, "");
       }
     }
