@@ -42,10 +42,14 @@ class TSNavigatorObserver extends NavigatorObserver {
           'previousRoute: ${previousRoute?.settings.name} ${previousRoute?.settings.arguments}');
     }
 
-    if (route.settings.name != null && route.settings.name == pages.last) {
+    if (route.settings.name != null &&
+        pages.isNotEmpty &&
+        route.settings.name == pages.last) {
       pages.removeLast();
       tsFlutterPluginPlatform.eventViewPageStop();
-      tsFlutterPluginPlatform.eventViewPage(pages.last, "");
+      if (pages.isNotEmpty) {
+        tsFlutterPluginPlatform.eventViewPage(pages.last, "");
+      }
     }
   }
 
@@ -57,12 +61,19 @@ class TSNavigatorObserver extends NavigatorObserver {
           'oldRoute: ${oldRoute?.settings.name} ${oldRoute?.settings.arguments}');
     }
 
-    // tsFlutterPluginPlatform.eventViewPageStop();
-    // if (newRoute != null && newRoute.settings.name != null) {
-    //   var arguments = newRoute.settings.arguments != null
-    //       ? jsonEncode(newRoute.settings.arguments).toString()
-    //       : "";
-    //   tsFlutterPluginPlatform.eventViewPage(newRoute.settings.name!, arguments);
-    // }
+    if (newRoute != null &&
+        newRoute.settings.name != null &&
+        oldRoute != null &&
+        oldRoute.settings.name != null) {
+      if (pages.isNotEmpty && oldRoute.settings.name == pages.last) {
+        var arguments = newRoute.settings.arguments != null
+            ? jsonEncode(newRoute.settings.arguments).toString()
+            : "";
+        pages.removeLast();
+        pages.add(newRoute.settings.name!);
+        tsFlutterPluginPlatform.eventViewPageStop();
+        tsFlutterPluginPlatform.eventViewPage(pages.last, arguments);
+      }
+    }
   }
 }
