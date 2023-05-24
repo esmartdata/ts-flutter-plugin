@@ -32,7 +32,7 @@ class _MyAppState extends State<MyApp> {
 
   Future<void> initSDK() async {
     InitData initData = InitData("ts1684140512952", true, "tsApp", "tsExt",
-        "https://tsapiqa.escase.cn/collection/i", true);
+        "https://tsapiqa.escase.cn/collection/i");
     bool? result = await _tsFlutterPlugin.initSDK(initData);
     if (kDebugMode) {
       print("初始化结果:$result");

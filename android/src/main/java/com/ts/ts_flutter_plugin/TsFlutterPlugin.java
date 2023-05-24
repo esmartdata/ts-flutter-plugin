@@ -33,8 +33,6 @@ public class TsFlutterPlugin implements FlutterPlugin, MethodCallHandler {
 
     private boolean init = false;
 
-    private boolean debug = false;
-
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
         context = flutterPluginBinding.getApplicationContext();
@@ -81,11 +79,10 @@ public class TsFlutterPlugin implements FlutterPlugin, MethodCallHandler {
         try {
             JSONObject jsonObject = new JSONObject((String) object);
             String appKey = jsonObject.getString("appKey");
-            debug = jsonObject.getBoolean("debug");
+            boolean debug = jsonObject.getBoolean("debug");
             String tsApp = jsonObject.getString("tsApp");
             String tsExt = jsonObject.getString("tsExt");
             String serverUrl = jsonObject.getString("serverUrl");
-            boolean autoTrack = jsonObject.getBoolean("autoTrack");
 
             TSConfOption confOption = new TSConfOption(context, appKey, tsExt, tsApp, debug);
             confOption.setServerUrl(serverUrl);

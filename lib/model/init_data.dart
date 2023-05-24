@@ -6,7 +6,6 @@ class InitData {
   String tsApp;
   String tsExt;
   String serverUrl;
-  bool autoTrack;
 
   InitData(
     this.appKey,
@@ -14,7 +13,6 @@ class InitData {
     this.tsApp,
     this.tsExt,
     this.serverUrl,
-    this.autoTrack,
   );
 
   @override
@@ -24,8 +22,7 @@ class InitData {
       "debug": debug,
       "tsApp": tsApp,
       "tsExt": tsExt,
-      "serverUrl": serverUrl,
-      "autoTrack": autoTrack
+      "serverUrl": serverUrl
     });
   }
 }
