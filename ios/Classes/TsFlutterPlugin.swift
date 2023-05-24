@@ -4,18 +4,18 @@ import AnalyticsSDK
 
 public class TsFlutterPlugin: NSObject, FlutterPlugin {
     
-    public static let shared = TsFlutterPlugin()
+  public static let shared = TsFlutterPlugin()
   
-    private override init() {
-           super.init()
-       }
-    
-    public var launchOptions: [UIApplication.LaunchOptionsKey: Any]?
+  private override init() {
+      super.init()
+  }
+  
+  public var launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     
   public static func register(with registrar: FlutterPluginRegistrar) {
     let channel = FlutterMethodChannel(name: "ts_flutter_plugin", binaryMessenger: registrar.messenger())
-    let instance = TsFlutterPlugin()
-    registrar.addMethodCallDelegate(instance, channel: channel)
+//    let instance = TsFlutterPlugin()
+    registrar.addMethodCallDelegate(shared, channel: channel)
   }
 
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -29,6 +29,7 @@ public class TsFlutterPlugin: NSObject, FlutterPlugin {
         setUserInfo();
       result(true)
     case "event":
+        print(call.arguments)
         event();
       result(true)
     case "eventViewPage":
@@ -44,8 +45,7 @@ public class TsFlutterPlugin: NSObject, FlutterPlugin {
   let serverURL = "https://tsapiqa.escase.cn/collection/i"
 
   func configure_TSAnalyticsSDK(launchOptions: [UIApplication.LaunchOptionsKey: Any]?) {
-      // 初始化配置 配置TSConfigOptions对象，默认server_url值SDK会自动判断
-//        let options = TSConfigOptions(appKey: TSAnalytics_key, launchOptions: launchOptions)
+      print("开始初始化")
       // 如果需要自定义指定server_url参数，则使用下面的方法进行配置
       let options = TSConfigOptions(appKey: TSAnalytics_key,serverURL: serverURL, launchOptions: launchOptions);
       // 开启 Debug模式
@@ -56,6 +56,7 @@ public class TsFlutterPlugin: NSObject, FlutterPlugin {
       options.ts_ext = ""
       // 初始化SDK
       TSAnalyticsSDK.start(with: options)
+      print("结束初始化")
   }
     
     func setUserInfo() {
@@ -69,7 +70,7 @@ public class TsFlutterPlugin: NSObject, FlutterPlugin {
         // 事件名 必须
         eventInfo.eventName = "获取验证码";
         let eventParam = [
-            "phone": "1861087138x",//事件属性 非必须 手机号
+            "phone": "1861087138x",
          ];
         eventInfo.eventParam = eventParam;
         // 上报数据
