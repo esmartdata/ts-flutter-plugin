@@ -21,8 +21,8 @@ class TsFlutterPlugin {
 
   /// 打点
   Future<bool?> event(
-      String eventName, Map<dynamic, dynamic> properties) async {
-    return tsFlutterPluginPlatform.event(eventName, properties);
+      String eventName, Map<dynamic, dynamic>? properties) async {
+    return tsFlutterPluginPlatform.event(eventName, properties ?? {});
   }
 
   Future<bool?> eventViewPage(String viewName, dynamic arguments) async {
