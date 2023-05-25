@@ -66,6 +66,10 @@ public class TsFlutterPlugin implements FlutterPlugin, MethodCallHandler {
                 Log.d(TAG, "页面停止");
                 eventViewScreenStop(result);
                 break;
+            case "setPageNameTitle":
+                Log.d(TAG, "页面名称标题:" + call.arguments);
+                setPageNameTitle(call.arguments, result);
+                break;
             default:
                 result.notImplemented();
                 break;
@@ -203,6 +207,20 @@ public class TsFlutterPlugin implements FlutterPlugin, MethodCallHandler {
         Constants.setPrevSessionId(Constants.getSessionId());
         Constants.setPrevPath(Constants.getCurrentPath());
         result.success(true);
+    }
+
+    void setPageNameTitle(Object object, MethodChannel.Result result) {
+        try {
+            JSONObject jsonObject = new JSONObject((String) object);
+            String pageName = jsonObject.getString("pageName");
+            String pageTitle = jsonObject.getString("pageTitle");
+            TSAnalyticsSDK.setPageName(pageName);
+            TSAnalyticsSDK.setPageTitle(pageTitle);
+            result.success(true);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            result.success(false);
+        }
     }
 
     @Override

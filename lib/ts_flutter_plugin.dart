@@ -32,4 +32,9 @@ class TsFlutterPlugin {
   Future<bool?> eventViewPageStop() async {
     return tsFlutterPluginPlatform.eventViewPageStop();
   }
+
+  Future<bool?> setPageNameTitle(
+      {String pageName = "", String pageTitle = ""}) async {
+    return tsFlutterPluginPlatform.setPageNameTitle(pageName, pageTitle);
+  }
 }

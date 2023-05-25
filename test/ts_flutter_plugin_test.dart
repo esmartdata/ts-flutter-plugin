@@ -37,6 +37,11 @@ class MockTsFlutterPluginPlatform
   Future<bool?> setUserInfo(UserInfo userInfo) {
     throw UnimplementedError();
   }
+
+  @override
+  Future<bool?> setPageNameTitle(String pageName, String pageTitle) {
+    throw UnimplementedError();
+  }
 }
 
 void main() {
