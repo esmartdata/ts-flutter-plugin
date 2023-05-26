@@ -53,7 +53,7 @@ class _HomePageState extends State<HomePage> {
               child: const Text("事件打点"),
               onPressed: () async {
                 bool? result = await _tsFlutterPlugin
-                    .event("eventName", {"eventKey": "eventValue"});
+                    .event("eventName_iOS", {"eventKey": "eventValue"});
                 if (kDebugMode) {
                   print("事件打点结果:$result");
                 }
