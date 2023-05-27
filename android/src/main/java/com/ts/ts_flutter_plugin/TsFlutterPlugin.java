@@ -60,11 +60,11 @@ public class TsFlutterPlugin implements FlutterPlugin, MethodCallHandler {
                 break;
             case "eventViewPage":
                 Log.d(TAG, "页面属性:" + call.arguments);
-                eventViewScreen(call.arguments, result);
+                eventViewPage(call.arguments, result);
                 break;
             case "eventViewPageStop":
                 Log.d(TAG, "页面停止");
-                eventViewScreenStop(result);
+                eventViewPageStop(result);
                 break;
             case "setPageNameTitle":
                 Log.d(TAG, "页面名称标题:" + call.arguments);
@@ -162,7 +162,7 @@ public class TsFlutterPlugin implements FlutterPlugin, MethodCallHandler {
     /**
      * 打开页面
      */
-    void eventViewScreen(Object object, MethodChannel.Result result) {
+    void eventViewPage(Object object, MethodChannel.Result result) {
         if (!init) {
             return;
         }
@@ -193,7 +193,7 @@ public class TsFlutterPlugin implements FlutterPlugin, MethodCallHandler {
     /**
      * 页面停止
      */
-    void eventViewScreenStop(MethodChannel.Result result) {
+    void eventViewPageStop(MethodChannel.Result result) {
         if (!init) {
             return;
         }

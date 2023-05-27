@@ -42,11 +42,11 @@ abstract class TsFlutterPluginPlatform extends PlatformInterface {
     throw UnimplementedError('event() has not been implemented.');
   }
 
-  Future<bool?> eventViewPage(String viewName, dynamic arguments) async {
+  Future<bool?> eventViewPage(String viewName, dynamic arguments, String preViewName) async {
     throw UnimplementedError('eventViewPage() has not been implemented.');
   }
 
-  Future<bool?> eventViewPageStop() async {
+  Future<bool?> eventViewPageStop(String viewName, String preViewName) async {
     throw UnimplementedError('eventViewPageStop() has not been implemented.');
   }
 

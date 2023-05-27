@@ -4,62 +4,62 @@ import AnalyticsSDK
 
 public class TsFlutterPlugin: NSObject, FlutterPlugin {
     
-  public static let shared = TsFlutterPlugin()
-  
-  private override init() {
-      super.init()
-  }
-  
-  public var launchOptions: [UIApplication.LaunchOptionsKey: Any]?
+    public static let shared = TsFlutterPlugin()
     
-  public static func register(with registrar: FlutterPluginRegistrar) {
-    let channel = FlutterMethodChannel(name: "ts_flutter_plugin", binaryMessenger: registrar.messenger())
-    registrar.addMethodCallDelegate(shared, channel: channel)
-  }
-
-  public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-    switch call.method {
-    case "getPlatformVersion":
-      result("iOS " + UIDevice.current.systemVersion)
-    case "initSDK":
-        initSDK(call.arguments, result)
-    case "setUserInfo":
-        setUserInfo(call.arguments, result);
-    case "event":
-        event(call.arguments, result);
-      result(true)
-    case "eventViewPage":
-        eventViewScreen(call.arguments, result);
-    case "eventViewPageStop":
-       result(true)
-    default:
-      result(FlutterMethodNotImplemented)
+    private override init() {
+        super.init()
     }
-  }
-
-  func initSDK(_ arguments: Any?, _ result:@escaping FlutterResult) {
-      do {
-          if let jsonString = arguments as? String,
-             let jsonData = jsonString.data(using: .utf8),
-             let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any] {
-              let appKey = jsonObject["appKey"] as? String ?? ""
-              let debug = jsonObject["debug"] as? Bool ?? false
-              let tsApp = jsonObject["tsApp"] as? String ?? ""
-              let tsExt = jsonObject["tsExt"] as? String ?? ""
-              let serverUrl = jsonObject["serverUrl"] as? String ?? ""
-            
-              let options = TSConfigOptions(appKey: appKey,serverURL: serverUrl, launchOptions: launchOptions);
-              options.debugMode = debug ? TSAnalyticsDebugMode.only : TSAnalyticsDebugMode.off
-              options.ts_app = tsApp
-              options.ts_ext = tsExt
-              TSAnalyticsSDK.start(with: options)
-              result(true)
-          }
-      } catch {
-          print("JSON parsing error: \(error)")
-          result(false)
-      }
-  }
+    
+    public var launchOptions: [UIApplication.LaunchOptionsKey: Any]?
+    
+    public static func register(with registrar: FlutterPluginRegistrar) {
+        let channel = FlutterMethodChannel(name: "ts_flutter_plugin", binaryMessenger: registrar.messenger())
+        registrar.addMethodCallDelegate(shared, channel: channel)
+    }
+    
+    public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        switch call.method {
+        case "getPlatformVersion":
+            result("iOS " + UIDevice.current.systemVersion)
+        case "initSDK":
+            initSDK(call.arguments, result)
+        case "setUserInfo":
+            setUserInfo(call.arguments, result);
+        case "event":
+            event(call.arguments, result);
+            result(true)
+        case "eventViewPage":
+            eventViewPage(call.arguments, result);
+        case "eventViewPageStop":
+            eventViewPageStop(call.arguments, result);
+        default:
+            result(FlutterMethodNotImplemented)
+        }
+    }
+    
+    func initSDK(_ arguments: Any?, _ result:@escaping FlutterResult) {
+        do {
+            if let jsonString = arguments as? String,
+               let jsonData = jsonString.data(using: .utf8),
+               let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any] {
+                let appKey = jsonObject["appKey"] as? String ?? ""
+                let debug = jsonObject["debug"] as? Bool ?? false
+                let tsApp = jsonObject["tsApp"] as? String ?? ""
+                let tsExt = jsonObject["tsExt"] as? String ?? ""
+                let serverUrl = jsonObject["serverUrl"] as? String ?? ""
+                
+                let options = TSConfigOptions(appKey: appKey,serverURL: serverUrl, launchOptions: launchOptions);
+                options.debugMode = debug ? TSAnalyticsDebugMode.only : TSAnalyticsDebugMode.off
+                options.ts_app = tsApp
+                options.ts_ext = tsExt
+                TSAnalyticsSDK.start(with: options)
+                result(true)
+            }
+        } catch {
+            print("JSON parsing error: \(error)")
+            result(false)
+        }
+    }
     
     func setUserInfo(_ arguments: Any?, _ result:@escaping FlutterResult) {
         do {
@@ -67,16 +67,16 @@ public class TsFlutterPlugin: NSObject, FlutterPlugin {
                let jsonData = jsonString.data(using: .utf8),
                let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any] {
                 let guid = jsonObject["guid"] as? String ?? ""
-               let realName = jsonObject["real_name"] as? String ?? ""
-               let nickName = jsonObject["nick_name"] as? String ?? ""
-               let age = jsonObject["age"] as? String ?? ""
-               let birthday = jsonObject["birthday"] as? String ?? ""
-               let gender = jsonObject["gender"] as? String ?? ""
-               let account = jsonObject["account"] as? String ?? ""
-               let country = jsonObject["country"] as? String ?? ""
-               let province = jsonObject["province"] as? String ?? ""
-               let city = jsonObject["city"] as? String ?? ""
-              
+                let realName = jsonObject["real_name"] as? String ?? ""
+                let nickName = jsonObject["nick_name"] as? String ?? ""
+                let age = jsonObject["age"] as? String ?? ""
+                let birthday = jsonObject["birthday"] as? String ?? ""
+                let gender = jsonObject["gender"] as? String ?? ""
+                let account = jsonObject["account"] as? String ?? ""
+                let country = jsonObject["country"] as? String ?? ""
+                let province = jsonObject["province"] as? String ?? ""
+                let city = jsonObject["city"] as? String ?? ""
+                
                 let userInfo = TSConfigUserInfo();
                 userInfo.guid = guid;
                 userInfo.real_name = realName;
@@ -99,12 +99,12 @@ public class TsFlutterPlugin: NSObject, FlutterPlugin {
     
     func event(_ arguments: Any?, _ result: @escaping FlutterResult) {
         guard let object = arguments as? [Any],
-                  let eventName = object.first as? String,
-                  let eventParam = object.last as? [String: Any] else {
-                result(false)
-                return
-            }
-            
+              let eventName = object.first as? String,
+              let eventParam = object.last as? [String: Any] else {
+            result(false)
+            return
+        }
+        
         let eventInfo = TSConfigEvent();
         eventInfo.eventName = eventName;
         eventInfo.eventParam = eventParam;
@@ -112,27 +112,57 @@ public class TsFlutterPlugin: NSObject, FlutterPlugin {
         result(true)
     }
     
-    func eventViewScreen(_ arguments: Any?, _ result: @escaping FlutterResult) {
+    let prevSessionId = "";
+    
+    func eventViewPage(_ arguments: Any?, _ result: @escaping FlutterResult) {
         do {
             if let jsonString = arguments as? String,
                let jsonData = jsonString.data(using: .utf8),
                let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any] {
                 let viewName = jsonObject["viewName"] as? String ?? ""
                 let args = jsonObject["arguments"] as? String ?? ""
-        
-                let page = TSConfigPageSession();
-                page.current_path = viewName;
-                TSAnalyticsSDK.sharedInstance().setPageStartPageview(page)
+                
+                let pageInfo = TSConfigPage()
+                pageInfo.prev_session_id = prevSessionId
+                pageInfo.session_id = TSConfigOptions.getSessionId()
+                pageInfo.prev_path = "prev_path"
+                pageInfo.current_path = "current_path"
+                pageInfo.page_id = "current_path"
+                pageInfo.page_title = "current_path"
+                pageInfo.page_query = ""
+                
+                let sessionInfo = TSConfigPageSession()
+                sessionInfo.prev_session_id = prevSessionId
+                sessionInfo.session_id = pageInfo.session_id
+                sessionInfo.start_session_time = Date().timeIntervalSince1970 * 1000
+                sessionInfo.current_path = NSStringFromClass(type(of: self))
+                sessionInfo.page_id = NSStringFromClass(type(of: self))
+                
+                
+                TSAnalyticsSDK.sharedInstance().save(pageInfo)
+                TSAnalyticsSDK.sharedInstance().save(sessionInfo)
+                
+                TSAnalyticsSDK.sharedInstance().setPagePageview(pageInfo)
+                TSAnalyticsSDK.sharedInstance().setPageStartPageview(sessionInfo)
+                
                 result(true)
             }
         } catch {
             print("JSON parsing error: \(error)")
             result(false)
         }
-        
     }
     
-    func eventViewScreenStop(_ arguments: Any?, _ result: @escaping FlutterResult) {
-
+    func eventViewPageStop(_ arguments: Any?, _ result: @escaping FlutterResult) {
+        let sessionInfo = TSConfigPageSession()
+        sessionInfo.prev_session_id = prevSessionId
+        sessionInfo.session_id = TSAnalyticsSDK.sharedInstance().sessionInfo.session_id
+        sessionInfo.current_path = "current_path"
+        sessionInfo.page_id = "current_path"
+        sessionInfo.start_session_time = TSAnalyticsSDK.sharedInstance().sessionInfo.start_session_time
+        sessionInfo.end_session_time = Date().timeIntervalSince1970 * 1000
+        sessionInfo.session_duration = sessionInfo.end_session_time - sessionInfo.start_session_time
+        
+        TSAnalyticsSDK.sharedInstance().setPageEndPageview(sessionInfo)
     }
 }

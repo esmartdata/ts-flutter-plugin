@@ -25,12 +25,13 @@ class TSNavigatorObserver extends NavigatorObserver {
       if (pages.isEmpty) {
         tsFlutterPluginPlatform.event("应用启动", {});
         pages.add(route.settings.name!);
-        tsFlutterPluginPlatform.eventViewPage(pages.last, arguments);
-      } else if (previousRoute?.settings.name != null &&
-          previousRoute?.settings.name == pages.last) {
+        tsFlutterPluginPlatform.eventViewPage(pages.last, arguments, "");
+      } else if (previousRoute?.settings.name != null) {
         pages.add(route.settings.name!);
-        tsFlutterPluginPlatform.eventViewPageStop();
-        tsFlutterPluginPlatform.eventViewPage(pages.last, arguments);
+        tsFlutterPluginPlatform.eventViewPageStop(
+            route.settings.name ?? "", previousRoute?.settings.name ?? "");
+        tsFlutterPluginPlatform.eventViewPage(route.settings.name ?? "",
+            arguments, previousRoute?.settings.name ?? "");
       }
     }
   }
@@ -43,14 +44,12 @@ class TSNavigatorObserver extends NavigatorObserver {
           'previousRoute: ${previousRoute?.settings.name} ${previousRoute?.settings.arguments}');
     }
 
-    if (route.settings.name != null &&
-        pages.isNotEmpty &&
-        route.settings.name == pages.last) {
+    if (route.settings.name != null && previousRoute?.settings.name != null) {
       pages.removeLast();
-      if (pages.isNotEmpty) {
-        tsFlutterPluginPlatform.eventViewPageStop();
-        tsFlutterPluginPlatform.eventViewPage(pages.last, "");
-      }
+      tsFlutterPluginPlatform.eventViewPageStop(
+          route.settings.name ?? "", previousRoute?.settings.name ?? "");
+      tsFlutterPluginPlatform.eventViewPage(
+        previousRoute?.settings.name ?? "", "", route.settings.name ?? "");
     }
   }
 
@@ -62,19 +61,16 @@ class TSNavigatorObserver extends NavigatorObserver {
           'oldRoute: ${oldRoute?.settings.name} ${oldRoute?.settings.arguments}');
     }
 
-    if (newRoute != null &&
-        newRoute.settings.name != null &&
-        oldRoute != null &&
-        oldRoute.settings.name != null) {
-      if (pages.isNotEmpty && oldRoute.settings.name == pages.last) {
-        var arguments = newRoute.settings.arguments != null
-            ? jsonEncode(newRoute.settings.arguments).toString()
-            : "";
-        pages.removeLast();
-        pages.add(newRoute.settings.name!);
-        tsFlutterPluginPlatform.eventViewPageStop();
-        tsFlutterPluginPlatform.eventViewPage(pages.last, arguments);
-      }
+    if (newRoute?.settings.name != null && oldRoute?.settings.name != null) {
+      var arguments = newRoute?.settings.arguments != null
+          ? jsonEncode(newRoute?.settings.arguments).toString()
+          : "";
+      pages.removeLast();
+      pages.add(newRoute?.settings.name ?? "");
+      tsFlutterPluginPlatform.eventViewPageStop(
+        oldRoute?.settings.name ?? "", "B页面上个页面");
+      tsFlutterPluginPlatform.eventViewPage(newRoute?.settings.name ?? "",
+          arguments, oldRoute?.settings.name ?? "");
     }
   }
 }
