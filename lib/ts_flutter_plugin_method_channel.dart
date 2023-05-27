@@ -47,8 +47,8 @@ class MethodChannelTsFlutterPlugin extends TsFlutterPluginPlatform {
   }
 
   @override
-  Future<bool?> eventViewPageStop(String viewName, String preViewName) async {
-    Map<String, dynamic> map = {"viewName": viewName, "preViewName": preViewName};
+  Future<bool?> eventViewPageStop(String viewName) async {
+    Map<String, dynamic> map = {"viewName": viewName};
     return await methodChannel.invokeMethod<bool>('eventViewPageStop', jsonEncode(map));
   }
 

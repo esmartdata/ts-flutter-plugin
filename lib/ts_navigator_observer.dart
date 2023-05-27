@@ -24,15 +24,13 @@ class TSNavigatorObserver extends NavigatorObserver {
     if (route.settings.name != null) {
       if (pages.isEmpty) {
         tsFlutterPluginPlatform.event("应用启动", {});
-        pages.add(route.settings.name!);
-        tsFlutterPluginPlatform.eventViewPage(pages.last, arguments, "");
       } else if (previousRoute?.settings.name != null) {
-        pages.add(route.settings.name!);
         tsFlutterPluginPlatform.eventViewPageStop(
-            route.settings.name ?? "", previousRoute?.settings.name ?? "");
-        tsFlutterPluginPlatform.eventViewPage(route.settings.name ?? "",
-            arguments, previousRoute?.settings.name ?? "");
+            previousRoute?.settings.name ?? "");
       }
+      pages.add(route.settings.name!);
+      tsFlutterPluginPlatform.eventViewPage(route.settings.name ?? "",
+          arguments, previousRoute?.settings.name ?? "");
     }
   }
 
@@ -43,13 +41,12 @@ class TSNavigatorObserver extends NavigatorObserver {
           'didPop - route: ${route.settings.name} ${route.settings.arguments} '
           'previousRoute: ${previousRoute?.settings.name} ${previousRoute?.settings.arguments}');
     }
-
+    // didPop - route: /b_page null previousRoute: / null
     if (route.settings.name != null && previousRoute?.settings.name != null) {
       pages.removeLast();
-      tsFlutterPluginPlatform.eventViewPageStop(
-          route.settings.name ?? "", previousRoute?.settings.name ?? "");
+      tsFlutterPluginPlatform.eventViewPageStop(route.settings.name ?? "");
       tsFlutterPluginPlatform.eventViewPage(
-        previousRoute?.settings.name ?? "", "", route.settings.name ?? "");
+          previousRoute?.settings.name ?? "", "", route.settings.name ?? "");
     }
   }
 
@@ -61,6 +58,7 @@ class TSNavigatorObserver extends NavigatorObserver {
           'oldRoute: ${oldRoute?.settings.name} ${oldRoute?.settings.arguments}');
     }
 
+    // didReplace - newRoute: /c_page {key: value} oldRoute: /b_page null
     if (newRoute?.settings.name != null && oldRoute?.settings.name != null) {
       var arguments = newRoute?.settings.arguments != null
           ? jsonEncode(newRoute?.settings.arguments).toString()
@@ -68,7 +66,7 @@ class TSNavigatorObserver extends NavigatorObserver {
       pages.removeLast();
       pages.add(newRoute?.settings.name ?? "");
       tsFlutterPluginPlatform.eventViewPageStop(
-        oldRoute?.settings.name ?? "", "B页面上个页面");
+          oldRoute?.settings.name ?? "");
       tsFlutterPluginPlatform.eventViewPage(newRoute?.settings.name ?? "",
           arguments, oldRoute?.settings.name ?? "");
     }

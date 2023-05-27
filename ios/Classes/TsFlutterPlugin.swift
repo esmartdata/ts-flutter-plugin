@@ -32,6 +32,8 @@ public class TsFlutterPlugin: NSObject, FlutterPlugin {
             eventViewPage(call.arguments, result);
         case "eventViewPageStop":
             eventViewPageStop(call.arguments, result);
+        case "setPageNameTitle":
+            setPageNameTitle(call.arguments, result);
         default:
             result(FlutterMethodNotImplemented)
         }
@@ -112,7 +114,7 @@ public class TsFlutterPlugin: NSObject, FlutterPlugin {
         result(true)
     }
     
-    let prevSessionId = "";
+    var preSessionId = "";
     
     func eventViewPage(_ arguments: Any?, _ result: @escaping FlutterResult) {
         do {
@@ -121,26 +123,30 @@ public class TsFlutterPlugin: NSObject, FlutterPlugin {
                let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any] {
                 let viewName = jsonObject["viewName"] as? String ?? ""
                 let args = jsonObject["arguments"] as? String ?? ""
+                let preViewName = jsonObject["preViewName"] as? String ?? ""
                 
                 let pageInfo = TSConfigPage()
-                pageInfo.prev_session_id = prevSessionId
+                pageInfo.prev_session_id = preSessionId
                 pageInfo.session_id = TSConfigOptions.getSessionId()
-                pageInfo.prev_path = "prev_path"
-                pageInfo.current_path = "current_path"
-                pageInfo.page_id = "current_path"
-                pageInfo.page_title = "current_path"
-                pageInfo.page_query = ""
+                pageInfo.prev_path = preViewName
+                pageInfo.current_path = viewName
+                pageInfo.page_id = viewName
+                pageInfo.page_title = ""
+                pageInfo.page_name = ""
+                pageInfo.page_query = args
                 
                 let sessionInfo = TSConfigPageSession()
-                sessionInfo.prev_session_id = prevSessionId
+                sessionInfo.prev_session_id = preSessionId
                 sessionInfo.session_id = pageInfo.session_id
                 sessionInfo.start_session_time = Date().timeIntervalSince1970 * 1000
-                sessionInfo.current_path = NSStringFromClass(type(of: self))
-                sessionInfo.page_id = NSStringFromClass(type(of: self))
+                sessionInfo.current_path = viewName
+                sessionInfo.page_id = viewName
                 
                 
                 TSAnalyticsSDK.sharedInstance().save(pageInfo)
                 TSAnalyticsSDK.sharedInstance().save(sessionInfo)
+                
+                preSessionId = pageInfo.session_id;
                 
                 TSAnalyticsSDK.sharedInstance().setPagePageview(pageInfo)
                 TSAnalyticsSDK.sharedInstance().setPageStartPageview(sessionInfo)
@@ -154,15 +160,43 @@ public class TsFlutterPlugin: NSObject, FlutterPlugin {
     }
     
     func eventViewPageStop(_ arguments: Any?, _ result: @escaping FlutterResult) {
-        let sessionInfo = TSConfigPageSession()
-        sessionInfo.prev_session_id = prevSessionId
-        sessionInfo.session_id = TSAnalyticsSDK.sharedInstance().sessionInfo.session_id
-        sessionInfo.current_path = "current_path"
-        sessionInfo.page_id = "current_path"
-        sessionInfo.start_session_time = TSAnalyticsSDK.sharedInstance().sessionInfo.start_session_time
-        sessionInfo.end_session_time = Date().timeIntervalSince1970 * 1000
-        sessionInfo.session_duration = sessionInfo.end_session_time - sessionInfo.start_session_time
-        
-        TSAnalyticsSDK.sharedInstance().setPageEndPageview(sessionInfo)
+        do {
+            if let jsonString = arguments as? String,
+               let jsonData = jsonString.data(using: .utf8),
+               let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any] {
+                let viewName = jsonObject["viewName"] as? String ?? ""
+                
+                let sessionInfo = TSConfigPageSession()
+                sessionInfo.prev_session_id = preSessionId
+                sessionInfo.session_id = TSAnalyticsSDK.sharedInstance().sessionInfo.session_id
+                sessionInfo.current_path = viewName
+                sessionInfo.page_id = viewName
+                sessionInfo.start_session_time = TSAnalyticsSDK.sharedInstance().sessionInfo.start_session_time
+                sessionInfo.end_session_time = Date().timeIntervalSince1970 * 1000
+                sessionInfo.session_duration = sessionInfo.end_session_time - sessionInfo.start_session_time
+                
+                TSAnalyticsSDK.sharedInstance().setPageEndPageview(sessionInfo)
+            }
+        } catch {
+            print("JSON parsing error: \(error)")
+            result(false)
+        }
+    }
+    
+    func setPageNameTitle(_ arguments: Any?, _ result: @escaping FlutterResult) {
+        do {
+            if let jsonString = arguments as? String,
+               let jsonData = jsonString.data(using: .utf8),
+               let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any] {
+                let pageName = jsonObject["pageName"] as? String ?? ""
+                let pageTitle = jsonObject["pageTitle"] as? String ?? ""
+                
+//                pageInfo.page_title = ""
+//                pageInfo.page_name = ""
+            }
+        } catch {
+            print("JSON parsing error: \(error)")
+            result(false)
+        }
     }
 }
