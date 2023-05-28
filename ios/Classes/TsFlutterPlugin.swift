@@ -11,12 +11,16 @@ public class TsFlutterPlugin: NSObject, FlutterPlugin {
     }
     
     public var launchOptions: [UIApplication.LaunchOptionsKey: Any]?
-    
+
     public static func register(with registrar: FlutterPluginRegistrar) {
         let channel = FlutterMethodChannel(name: "ts_flutter_plugin", binaryMessenger: registrar.messenger())
         registrar.addMethodCallDelegate(shared, channel: channel)
     }
-    
+
+    var preSessionId = "";
+    var pageTitle = ""
+    var pageName = ""
+
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         switch call.method {
         case "getPlatformVersion":
@@ -113,9 +117,7 @@ public class TsFlutterPlugin: NSObject, FlutterPlugin {
         TSAnalyticsSDK.sharedInstance().event(eventInfo)
         result(true)
     }
-    
-    var preSessionId = "";
-    
+
     func eventViewPage(_ arguments: Any?, _ result: @escaping FlutterResult) {
         do {
             if let jsonString = arguments as? String,
@@ -131,9 +133,12 @@ public class TsFlutterPlugin: NSObject, FlutterPlugin {
                 pageInfo.prev_path = preViewName
                 pageInfo.current_path = viewName
                 pageInfo.page_id = viewName
-                pageInfo.page_title = ""
-                pageInfo.page_name = ""
+                pageInfo.page_title = pageTitle
+                pageInfo.page_name = pageName
                 pageInfo.page_query = args
+
+                pageTitle = ""
+                pageName = ""
                 
                 let sessionInfo = TSConfigPageSession()
                 sessionInfo.prev_session_id = preSessionId
@@ -141,8 +146,7 @@ public class TsFlutterPlugin: NSObject, FlutterPlugin {
                 sessionInfo.start_session_time = Date().timeIntervalSince1970 * 1000
                 sessionInfo.current_path = viewName
                 sessionInfo.page_id = viewName
-                
-                
+
                 TSAnalyticsSDK.sharedInstance().save(pageInfo)
                 TSAnalyticsSDK.sharedInstance().save(sessionInfo)
                 
@@ -190,9 +194,9 @@ public class TsFlutterPlugin: NSObject, FlutterPlugin {
                let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any] {
                 let pageName = jsonObject["pageName"] as? String ?? ""
                 let pageTitle = jsonObject["pageTitle"] as? String ?? ""
-                
-//                pageInfo.page_title = ""
-//                pageInfo.page_name = ""
+
+                pageName = pageName
+                pageTitle = pageTitle
             }
         } catch {
             print("JSON parsing error: \(error)")
