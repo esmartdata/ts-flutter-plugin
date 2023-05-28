@@ -25,32 +25,18 @@ abstract class TsFlutterPluginPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  Future<String?> getPlatformVersion() {
-    throw UnimplementedError('platformVersion() has not been implemented.');
-  }
+  Future<String?> getPlatformVersion();
 
-  Future<bool?> initSDK(InitData initData) async {
-    throw UnimplementedError('initSDK() has not been implemented.');
-  }
+  Future<bool?> initSDK(InitData initData);
 
-  Future<bool?> setUserInfo(UserInfo userInfo) async {
-    throw UnimplementedError('setUserInfo() has not been implemented.');
-  }
+  Future<bool?> setUserInfo(UserInfo userInfo);
 
   Future<bool?> event(
-      String eventName, Map<dynamic, dynamic> properties) async {
-    throw UnimplementedError('event() has not been implemented.');
-  }
+      String eventName, Map<dynamic, dynamic> properties);
 
-  Future<bool?> eventViewPage(String viewName, dynamic arguments, String preViewName) async {
-    throw UnimplementedError('eventViewPage() has not been implemented.');
-  }
+  Future<bool?> eventViewPage(String viewName, dynamic arguments, String preViewName);
 
-  Future<bool?> eventViewPageStop(String viewName) async {
-    throw UnimplementedError('eventViewPageStop() has not been implemented.');
-  }
+  Future<bool?> eventViewPageStop(String viewName);
 
-  Future<bool?> setPageNameTitle(String pageName, String pageTitle) async {
-    throw UnimplementedError('setPageNameTitle() has not been implemented.');
-  }
+  Future<bool?> setPageNameTitle(String pageName, String pageTitle);
 }

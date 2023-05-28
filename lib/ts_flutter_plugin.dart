@@ -29,8 +29,8 @@ class TsFlutterPlugin {
     return tsFlutterPluginPlatform.eventViewPage(viewName, arguments, preViewName);
   }
 
-  Future<bool?> eventViewPageStop(String viewName, String preViewName) async {
-    return tsFlutterPluginPlatform.eventViewPageStop(viewName, preViewName);
+  Future<bool?> eventViewPageStop(String viewName) async {
+    return tsFlutterPluginPlatform.eventViewPageStop(viewName);
   }
 
   Future<bool?> setPageNameTitle(
