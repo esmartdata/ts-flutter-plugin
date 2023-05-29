@@ -175,7 +175,6 @@ public class TsFlutterPlugin implements FlutterPlugin, MethodCallHandler {
             Constants.PAGE_QUERY = arguments;
             Constants.SESSION_ID = UUID.randomUUID().toString();
             Constants.setCurrentPath(viewName);
-            Constants.setPageTitle(viewName);
             Constants.START_SESSION_TIME = System.currentTimeMillis() + "";
             TSAnalyticsSDK.setPageView();
             TSConfOption option = TSAnalyticsSDK.sharedInstance().getOption();

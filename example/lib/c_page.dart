@@ -17,7 +17,7 @@ class _CPageState extends State<CPage> {
       ),
       body: Center(
         child: ElevatedButton(
-          child: const Text("push DPage"),
+          child: const Text("Push DPage"),
           onPressed: () {
             Navigator.pushNamed(context, "/d_page");
           },

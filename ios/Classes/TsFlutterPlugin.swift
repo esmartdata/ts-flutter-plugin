@@ -26,15 +26,20 @@ public class TsFlutterPlugin: NSObject, FlutterPlugin {
         case "getPlatformVersion":
             result("iOS " + UIDevice.current.systemVersion)
         case "initSDK":
+            print("初始化");
             initSDK(call.arguments, result)
         case "setUserInfo":
+            print("用户信息");
             setUserInfo(call.arguments, result);
         case "event":
+            print("打点");
             event(call.arguments, result);
             result(true)
         case "eventViewPage":
+            print("页面属性");
             eventViewPage(call.arguments, result);
         case "eventViewPageStop":
+            print("页面停止");
             eventViewPageStop(call.arguments, result);
         case "setPageNameTitle":
             setPageNameTitle(call.arguments, result);
@@ -195,8 +200,8 @@ public class TsFlutterPlugin: NSObject, FlutterPlugin {
                 let pageName = jsonObject["pageName"] as? String ?? ""
                 let pageTitle = jsonObject["pageTitle"] as? String ?? ""
 
-                pageName = pageName
-                pageTitle = pageTitle
+                self.pageName = pageName
+                self.pageTitle = pageTitle
             }
         } catch {
             print("JSON parsing error: \(error)")
