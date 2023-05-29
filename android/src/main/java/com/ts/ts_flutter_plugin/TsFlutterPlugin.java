@@ -175,8 +175,12 @@ public class TsFlutterPlugin implements FlutterPlugin, MethodCallHandler {
             Constants.PAGE_QUERY = arguments;
             Constants.SESSION_ID = UUID.randomUUID().toString();
             Constants.setCurrentPath(viewName);
+            Constants.setPageTitle(Constants.getPageTitle() == null || Constants.getPageTitle().isEmpty() ? viewName : Constants.getPageTitle());
             Constants.START_SESSION_TIME = System.currentTimeMillis() + "";
             TSAnalyticsSDK.setPageView();
+
+            Constants.setPageTitle("");
+
             TSConfOption option = TSAnalyticsSDK.sharedInstance().getOption();
             boolean enableSession = option.getEnableSession();
             if (enableSession) {

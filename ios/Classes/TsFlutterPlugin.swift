@@ -138,7 +138,7 @@ public class TsFlutterPlugin: NSObject, FlutterPlugin {
                 pageInfo.prev_path = preViewName
                 pageInfo.current_path = viewName
                 pageInfo.page_id = viewName
-                pageInfo.page_title = pageTitle
+                pageInfo.page_title = pageTitle.isEmpty ? viewName : pageTitle
                 pageInfo.page_name = pageName
                 pageInfo.page_query = args
 
