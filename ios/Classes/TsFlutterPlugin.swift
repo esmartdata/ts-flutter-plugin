@@ -26,22 +26,23 @@ public class TsFlutterPlugin: NSObject, FlutterPlugin {
         case "getPlatformVersion":
             result("iOS " + UIDevice.current.systemVersion)
         case "initSDK":
-            print("初始化");
+            print("初始化参数：" + String(describing: call.arguments));
             initSDK(call.arguments, result)
         case "setUserInfo":
-            print("用户信息");
+            print("用户信息参数：" + String(describing: call.arguments));
             setUserInfo(call.arguments, result);
         case "event":
-            print("打点");
+            print("打点参数：" + String(describing: call.arguments));
             event(call.arguments, result);
             result(true)
         case "eventViewPage":
-            print("页面属性");
+            print("页面属性参数：" + String(describing: call.arguments));
             eventViewPage(call.arguments, result);
         case "eventViewPageStop":
-            print("页面停止");
+            print("页面停止参数：" + String(describing: call.arguments));
             eventViewPageStop(call.arguments, result);
         case "setPageNameTitle":
+            print("设置页面名和标题参数：" + String(describing: call.arguments));
             setPageNameTitle(call.arguments, result);
         default:
             result(FlutterMethodNotImplemented)
