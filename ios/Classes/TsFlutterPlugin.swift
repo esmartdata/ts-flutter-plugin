@@ -60,8 +60,13 @@ public class TsFlutterPlugin: NSObject, FlutterPlugin {
                 let tsExt = jsonObject["tsExt"] as? String ?? ""
                 let serverUrl = jsonObject["serverUrl"] as? String ?? ""
                 
-                let options = TSConfigOptions(appKey: appKey,serverURL: serverUrl, launchOptions: launchOptions);
-                options.debugMode = debug ? TSAnalyticsDebugMode.only : TSAnalyticsDebugMode.off
+                var options: TSConfigOptions
+                if serverUrl.isEmpty {
+                    options = TSConfigOptions(appKey: appKey, launchOptions: launchOptions)
+                } else {
+                    options = TSConfigOptions(appKey: appKey, serverURL: serverUrl, launchOptions: launchOptions)
+                }
+                options.debugMode = debug ? .only : .off
                 options.ts_app = tsApp
                 options.ts_ext = tsExt
                 TSAnalyticsSDK.start(with: options)
