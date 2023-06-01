@@ -22,7 +22,7 @@ class TSNavigatorObserver extends NavigatorObserver {
       tsFlutterPluginPlatform.event("应用启动", {});
     }
 
-    var arguments = route.settings.arguments != null
+    var arguments = route.settings.arguments != null && route.settings.arguments is Map
         ? jsonEncode(route.settings.arguments).toString()
         : "";
     tsFlutterPluginPlatform
@@ -39,7 +39,6 @@ class TSNavigatorObserver extends NavigatorObserver {
           'previousRoute: ${previousRoute?.settings.name} ${previousRoute?.settings.arguments}');
     }
 
-    // didPop - route: /b_page null previousRoute: / null
     tsFlutterPluginPlatform.eventViewPageStop(route.settings.name ?? "");
     tsFlutterPluginPlatform.eventViewPage(
         previousRoute?.settings.name ?? "", "", route.settings.name ?? "");
@@ -53,8 +52,7 @@ class TSNavigatorObserver extends NavigatorObserver {
           'oldRoute: ${oldRoute?.settings.name} ${oldRoute?.settings.arguments}');
     }
 
-    // didReplace - newRoute: /c_page {key: value} oldRoute: /b_page null
-    var arguments = newRoute?.settings.arguments != null
+    var arguments = newRoute?.settings.arguments != null && newRoute?.settings.arguments is Map
         ? jsonEncode(newRoute?.settings.arguments).toString()
         : "";
     tsFlutterPluginPlatform.eventViewPageStop(oldRoute?.settings.name ?? "");
