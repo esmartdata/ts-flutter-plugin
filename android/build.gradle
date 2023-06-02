@@ -16,10 +16,6 @@ rootProject.allprojects {
     repositories {
         google()
         mavenCentral()
-        maven {
-            //SNAPSHOT仓库地址
-            url "https://oss.sonatype.org/content/repositories/snapshots"
-        }
     }
 }
 
@@ -38,7 +34,7 @@ android {
     }
 
     dependencies {
-        implementation 'com.esmartwave.analytics.androidsdk:TrackingSystemSDK:2.0.5-SNAPSHOT'
+        implementation 'com.esmartwave.analytics.androidsdk:TrackingSystemSDK:2.0.5'
     }
 
     testOptions {
