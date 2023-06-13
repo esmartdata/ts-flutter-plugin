@@ -26,6 +26,8 @@ class TSNavigatorObserver extends NavigatorObserver {
     try {
       arguments = jsonEncode(route.settings.arguments).toString();
     } catch (e) {
+      // 无法解析
+      // 页面传参是对象，且该对象没实现toJson方法，将无法记录页面跳转传递的参数
       arguments = "";
     }
 
@@ -60,6 +62,8 @@ class TSNavigatorObserver extends NavigatorObserver {
     try {
       arguments = jsonEncode(newRoute?.settings.arguments).toString();
     } catch (e) {
+      // 无法解析
+      // 页面传参是对象，且该对象没实现toJson方法，将无法记录页面跳转传递的参数
       arguments = "";
     }
 
