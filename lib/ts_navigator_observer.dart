@@ -26,9 +26,13 @@ class TSNavigatorObserver extends NavigatorObserver {
     try {
       arguments = jsonEncode(route.settings.arguments).toString();
     } catch (e) {
-      // 无法解析
-      // 页面传参是对象，且该对象没实现toJson方法，将无法记录页面跳转传递的参数
-      arguments = "";
+      if(route.settings.arguments != null) {
+        arguments = route.settings.arguments.toString();
+      } else {
+        // 无法解析
+        // 页面传参是对象，且该对象没实现toJson方法，将无法记录页面跳转传递的参数
+        arguments = "";
+      }
     }
 
     tsFlutterPluginPlatform
@@ -62,9 +66,13 @@ class TSNavigatorObserver extends NavigatorObserver {
     try {
       arguments = jsonEncode(newRoute?.settings.arguments).toString();
     } catch (e) {
-      // 无法解析
-      // 页面传参是对象，且该对象没实现toJson方法，将无法记录页面跳转传递的参数
-      arguments = "";
+      if(newRoute?.settings.arguments != null) {
+        arguments = newRoute!.settings.arguments.toString();
+      } else {
+        // 无法解析
+        // 页面传参是对象，且该对象没实现toJson方法，将无法记录页面跳转传递的参数
+        arguments = "";
+      }
     }
 
     tsFlutterPluginPlatform.eventViewPageStop(oldRoute?.settings.name ?? "");
