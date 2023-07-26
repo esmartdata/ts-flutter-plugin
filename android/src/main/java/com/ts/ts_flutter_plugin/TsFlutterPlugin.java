@@ -147,7 +147,9 @@ public class TsFlutterPlugin implements FlutterPlugin, MethodCallHandler {
             try {
                 JSONObject eventInfo = new JSONObject();
                 eventInfo.put("eventName", eventName);
-                eventInfo.put("eventParam", new JSONObject(eventParam));
+                if(!eventParam.isEmpty()) {
+                    eventInfo.put("eventParam", new JSONObject(eventParam));
+                }
                 TSAnalyticsSDK.event(eventInfo);
             } catch (Exception e) {
                 e.printStackTrace();

@@ -23,16 +23,11 @@ class TSNavigatorObserver extends NavigatorObserver {
     }
 
     String arguments;
+    var args = route.settings.arguments;
     try {
-      arguments = jsonEncode(route.settings.arguments).toString();
+      arguments = args != null ? jsonEncode(args).toString() : "";
     } catch (e) {
-      if(route.settings.arguments != null) {
-        arguments = route.settings.arguments.toString();
-      } else {
-        // 无法解析
-        // 页面传参是对象，且该对象没实现toJson方法，将无法记录页面跳转传递的参数
-        arguments = "";
-      }
+      arguments = args != null ? args.toString() : "";
     }
 
     tsFlutterPluginPlatform
@@ -63,16 +58,11 @@ class TSNavigatorObserver extends NavigatorObserver {
     }
 
     String arguments;
+    var args = newRoute?.settings.arguments;
     try {
-      arguments = jsonEncode(newRoute?.settings.arguments).toString();
+      arguments = args != null ? jsonEncode(args).toString() : "";
     } catch (e) {
-      if(newRoute?.settings.arguments != null) {
-        arguments = newRoute!.settings.arguments.toString();
-      } else {
-        // 无法解析
-        // 页面传参是对象，且该对象没实现toJson方法，将无法记录页面跳转传递的参数
-        arguments = "";
-      }
+      arguments = args != null ? args.toString() : "";
     }
 
     tsFlutterPluginPlatform.eventViewPageStop(oldRoute?.settings.name ?? "");
