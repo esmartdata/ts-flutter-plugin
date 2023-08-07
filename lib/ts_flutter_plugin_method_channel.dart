@@ -55,6 +55,6 @@ class MethodChannelTsFlutterPlugin extends TsFlutterPluginPlatform {
   @override
   Future<bool?> setPageNameTitle(String pageName, String pageTitle) async {
     Map<String, dynamic> map = {"pageName": pageName, "pageTitle": pageTitle};
-    return await methodChannel.invokeMethod<bool>('setPageNameTitle', map);
+    return await methodChannel.invokeMethod<bool>('setPageNameTitle', jsonEncode(map));
   }
 }
