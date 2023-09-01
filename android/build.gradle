@@ -38,11 +38,14 @@ android {
     }
 
     dependencies {
-        implementation 'com.esmartwave.analytics.androidsdk:TrackingSystemSDK:2.0.6-SNAPSHOT'
+        // 添加原生sdk依赖
+//        implementation 'com.esmartwave.analytics.androidsdk:TrackingSystemSDK:2.0.6-SNAPSHOT'
+        // 添加本地项目依赖
+        implementation project(':trackingsystemsdk')
     }
 
     testOptions {
-        unitTests.all {
+        unitTests.all {z
             testLogging {
                events "passed", "skipped", "failed", "standardOut", "standardError"
                outputs.upToDateWhen {false}
