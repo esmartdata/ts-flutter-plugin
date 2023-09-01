@@ -175,8 +175,14 @@ public class TsFlutterPlugin implements FlutterPlugin, MethodCallHandler {
 
             Constants.PAGE_URL = arguments;
             Constants.PAGE_QUERY = arguments;
-            Constants.SESSION_ID = UUID.randomUUID().toString();
+            String sesisonId = UUID.randomUUID().toString();
+            Constants.SESSION_ID = sesisonId;
             Constants.setCurrentPath(viewName);
+
+            // 保存插件端传给app的页面路径与sessionID
+            Constants.flutter_current_path = viewName;
+            Constants.flutter_session_id = sesisonId;
+
             Constants.setPageTitle(Constants.getPageTitle() == null || Constants.getPageTitle().isEmpty() ? viewName : Constants.getPageTitle());
             Constants.START_SESSION_TIME = System.currentTimeMillis() + "";
             TSAnalyticsSDK.setPageView();
@@ -211,6 +217,11 @@ public class TsFlutterPlugin implements FlutterPlugin, MethodCallHandler {
         Constants.setPageQuery("");
         Constants.setPrevSessionId(Constants.getSessionId());
         Constants.setPrevPath(Constants.getCurrentPath());
+
+        // 保存插件端传给app的页面路径与sessionID
+        Constants.flutter_prev_path = Constants.getFlutter_current_path();
+        Constants.flutter_prev_session_id = Constants.getFlutter_session_id();
+
         result.success(true);
     }
 
