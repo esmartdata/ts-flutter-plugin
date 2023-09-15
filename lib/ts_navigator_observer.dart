@@ -19,7 +19,7 @@ class TSNavigatorObserver extends NavigatorObserver {
 
     if (start) {
       start = false;
-      tsFlutterPluginPlatform.event("应用启动", {});
+      tsFlutterPluginPlatform.event("应用首次启动", {});
     }
 
     String arguments;

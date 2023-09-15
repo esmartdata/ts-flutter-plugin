@@ -21,23 +21,36 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   final _tsFlutterPlugin = TsFlutterPlugin();
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     initSDK();
   }
 
   Future<void> initSDK() async {
     // Android ts1684140512952 iOS ts1684980218141
-    InitData initData = InitData(appKey: "ts1684980218141", debug: true);
+    // tracing内部测试 qa1684135668676
+    InitData initData = InitData(appKey: "qa1684135668676", debug: true);
     bool? result = await _tsFlutterPlugin.initSDK(initData);
     if (kDebugMode) {
       print("初始化结果:$result");
     }
   }
+
+  // @override
+  // void didChangeAppLifecycleState(AppLifecycleState state) {
+  //   super.didChangeAppLifecycleState(state);
+  //   debugPrint(state.name);
+  //   // if (state == AppLifecycleState.resumed) {
+  //   //   debugPrint("切换到了前台");
+  //   // } else if (state == AppLifecycleState.paused) {
+  //   //   debugPrint("切换到了后台");
+  //   // }
+  // }
 
   @override
   Widget build(BuildContext context) {
