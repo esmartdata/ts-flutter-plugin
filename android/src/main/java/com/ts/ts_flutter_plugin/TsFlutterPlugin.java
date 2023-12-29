@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 
 import com.mdsoftware.trackingsystemsdk.Constants;
 import com.mdsoftware.trackingsystemsdk.TSAnalyticsSDK;
+import com.mdsoftware.trackingsystemsdk.TSAutoTrackTypes;
 import com.mdsoftware.trackingsystemsdk.TSConfOption;
 import com.mdsoftware.trackingsystemsdk.TSUser;
 
@@ -47,6 +48,10 @@ public class TsFlutterPlugin implements FlutterPlugin, MethodCallHandler {
                 result.success("Android " + android.os.Build.VERSION.RELEASE);
                 break;
             case "initSDK":
+//                if(AppInitConstants.INITIALIZED) {
+//                    Log.d(TAG, "sdk已初始化，不再进行初始化操作.");
+//                    return;
+//                }
                 Log.d(TAG, "初始化参数:" + call.arguments);
                 initSDK(call.arguments, result);
                 break;
@@ -88,8 +93,12 @@ public class TsFlutterPlugin implements FlutterPlugin, MethodCallHandler {
             String tsExt = jsonObject.getString("tsExt");
             String serverUrl = jsonObject.getString("serverUrl");
 
+            TSConfOption.IS_FLUTTER_PLUGIN = true;
+            TSAutoTrackTypes.APP_FIRST_START = false;
             TSConfOption confOption = new TSConfOption(context, appKey, tsExt, tsApp, debug);
             confOption.setServerUrl(serverUrl);
+
+
             TSAnalyticsSDK.startWithConfigOptions(confOption);
             result.success(true);
             init = true;
@@ -165,9 +174,9 @@ public class TsFlutterPlugin implements FlutterPlugin, MethodCallHandler {
      * 打开页面
      */
     void eventViewPage(Object object, MethodChannel.Result result) {
-        if (!init) {
-            return;
-        }
+//        if (!init) {
+//            return;
+//        }
         try {
             JSONObject jsonObject = new JSONObject((String) object);
             String viewName = jsonObject.getString("viewName");
@@ -205,9 +214,9 @@ public class TsFlutterPlugin implements FlutterPlugin, MethodCallHandler {
      * 页面停止
      */
     void eventViewPageStop(MethodChannel.Result result) {
-        if (!init) {
-            return;
-        }
+//        if (!init) {
+//            return;
+//        }
         Constants.END_SESSION_TIME = System.currentTimeMillis() + "";
         TSConfOption option = TSAnalyticsSDK.sharedInstance().getOption();
         boolean enableSession = option.getEnableSession();
