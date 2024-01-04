@@ -10,6 +10,7 @@ import com.mdsoftware.trackingsystemsdk.TSAnalyticsSDK;
 import com.mdsoftware.trackingsystemsdk.TSAutoTrackTypes;
 import com.mdsoftware.trackingsystemsdk.TSConfOption;
 import com.mdsoftware.trackingsystemsdk.TSUser;
+import com.mdsoftware.trackingsystemsdk.utils.StringUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,6 +34,10 @@ public class TsFlutterPlugin implements FlutterPlugin, MethodCallHandler {
     private MethodChannel channel;
 
     private boolean init = false;
+
+    private boolean pageView = false;
+
+    private String sessionId = "";
 
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
@@ -101,6 +106,9 @@ public class TsFlutterPlugin implements FlutterPlugin, MethodCallHandler {
 
             TSAnalyticsSDK.startWithConfigOptions(confOption);
             result.success(true);
+
+            sessionId = UUID.randomUUID().toString();
+            Constants.SESSION_ID = sessionId;
             init = true;
         } catch (JSONException e) {
             e.printStackTrace();
@@ -174,9 +182,9 @@ public class TsFlutterPlugin implements FlutterPlugin, MethodCallHandler {
      * 打开页面
      */
     void eventViewPage(Object object, MethodChannel.Result result) {
-//        if (!init) {
-//            return;
-//        }
+        if (!init) {
+            return;
+        }
         try {
             JSONObject jsonObject = new JSONObject((String) object);
             String viewName = jsonObject.getString("viewName");
@@ -184,13 +192,18 @@ public class TsFlutterPlugin implements FlutterPlugin, MethodCallHandler {
 
             Constants.PAGE_URL = arguments;
             Constants.PAGE_QUERY = arguments;
-            String sesisonId = UUID.randomUUID().toString();
-            Constants.SESSION_ID = sesisonId;
+            if(StringUtils.isEmpty(sessionId)) {
+                Constants.SESSION_ID = UUID.randomUUID().toString();
+            } else {
+                // 重置session_id，下次fluter初始化的时候会对该属性赋值
+                sessionId = "";
+            }
+
             Constants.setCurrentPath(viewName);
 
             // 保存插件端传给app的页面路径与sessionID
             Constants.flutter_current_path = viewName;
-            Constants.flutter_session_id = sesisonId;
+            Constants.flutter_session_id = Constants.SESSION_ID;
 
             Constants.setPageTitle(Constants.getPageTitle() == null || Constants.getPageTitle().isEmpty() ? viewName : Constants.getPageTitle());
             Constants.START_SESSION_TIME = System.currentTimeMillis() + "";
@@ -203,6 +216,7 @@ public class TsFlutterPlugin implements FlutterPlugin, MethodCallHandler {
             if (enableSession) {
                 TSAnalyticsSDK.setStartSession();
             }
+            pageView = true;
             result.success(true);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -214,9 +228,9 @@ public class TsFlutterPlugin implements FlutterPlugin, MethodCallHandler {
      * 页面停止
      */
     void eventViewPageStop(MethodChannel.Result result) {
-//        if (!init) {
-//            return;
-//        }
+        if (!pageView) {
+            return;
+        }
         Constants.END_SESSION_TIME = System.currentTimeMillis() + "";
         TSConfOption option = TSAnalyticsSDK.sharedInstance().getOption();
         boolean enableSession = option.getEnableSession();
