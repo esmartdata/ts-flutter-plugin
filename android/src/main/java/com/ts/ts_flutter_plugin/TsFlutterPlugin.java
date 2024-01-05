@@ -53,10 +53,6 @@ public class TsFlutterPlugin implements FlutterPlugin, MethodCallHandler {
                 result.success("Android " + android.os.Build.VERSION.RELEASE);
                 break;
             case "initSDK":
-//                if(AppInitConstants.INITIALIZED) {
-//                    Log.d(TAG, "sdk已初始化，不再进行初始化操作.");
-//                    return;
-//                }
                 Log.d(TAG, "初始化参数:" + call.arguments);
                 initSDK(call.arguments, result);
                 break;
@@ -99,6 +95,7 @@ public class TsFlutterPlugin implements FlutterPlugin, MethodCallHandler {
             String serverUrl = jsonObject.getString("serverUrl");
 
             TSConfOption.IS_FLUTTER_PLUGIN = true;
+            TSConfOption.FLUTTER_PLUGIN_SDK_VERSION = "0.0.7";
             TSAutoTrackTypes.APP_FIRST_START = false;
             TSConfOption confOption = new TSConfOption(context, appKey, tsExt, tsApp, debug);
             confOption.setServerUrl(serverUrl);
@@ -156,6 +153,9 @@ public class TsFlutterPlugin implements FlutterPlugin, MethodCallHandler {
      */
     @SuppressWarnings("unchecked")
     void event(Object object, MethodChannel.Result result) {
+        if(!init) {
+            return;
+        }
         try {
             List<Object> list = (List<Object>) object;
             String eventName = (String) list.get(0);
