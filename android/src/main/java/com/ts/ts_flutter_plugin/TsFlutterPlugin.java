@@ -7,8 +7,10 @@ import androidx.annotation.NonNull;
 
 import com.mdsoftware.trackingsystemsdk.Constants;
 import com.mdsoftware.trackingsystemsdk.TSAnalyticsSDK;
+import com.mdsoftware.trackingsystemsdk.TSAutoTrackTypes;
 import com.mdsoftware.trackingsystemsdk.TSConfOption;
 import com.mdsoftware.trackingsystemsdk.TSUser;
+import com.mdsoftware.trackingsystemsdk.utils.StringUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,6 +34,10 @@ public class TsFlutterPlugin implements FlutterPlugin, MethodCallHandler {
     private MethodChannel channel;
 
     private boolean init = false;
+
+    private boolean pageView = false;
+
+    private String sessionId = "";
 
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
@@ -88,10 +94,18 @@ public class TsFlutterPlugin implements FlutterPlugin, MethodCallHandler {
             String tsExt = jsonObject.getString("tsExt");
             String serverUrl = jsonObject.getString("serverUrl");
 
+            TSConfOption.IS_FLUTTER_PLUGIN = true;
+            TSConfOption.FLUTTER_PLUGIN_SDK_VERSION = "0.0.7";
+            TSAutoTrackTypes.APP_FIRST_START = false;
             TSConfOption confOption = new TSConfOption(context, appKey, tsExt, tsApp, debug);
             confOption.setServerUrl(serverUrl);
+
+
             TSAnalyticsSDK.startWithConfigOptions(confOption);
             result.success(true);
+
+            sessionId = UUID.randomUUID().toString();
+            Constants.SESSION_ID = sessionId;
             init = true;
         } catch (JSONException e) {
             e.printStackTrace();
@@ -139,6 +153,9 @@ public class TsFlutterPlugin implements FlutterPlugin, MethodCallHandler {
      */
     @SuppressWarnings("unchecked")
     void event(Object object, MethodChannel.Result result) {
+        if(!init) {
+            return;
+        }
         try {
             List<Object> list = (List<Object>) object;
             String eventName = (String) list.get(0);
@@ -175,13 +192,18 @@ public class TsFlutterPlugin implements FlutterPlugin, MethodCallHandler {
 
             Constants.PAGE_URL = arguments;
             Constants.PAGE_QUERY = arguments;
-            String sesisonId = UUID.randomUUID().toString();
-            Constants.SESSION_ID = sesisonId;
+            if(StringUtils.isEmpty(sessionId)) {
+                Constants.SESSION_ID = UUID.randomUUID().toString();
+            } else {
+                // 重置session_id，下次fluter初始化的时候会对该属性赋值
+                sessionId = "";
+            }
+
             Constants.setCurrentPath(viewName);
 
             // 保存插件端传给app的页面路径与sessionID
             Constants.flutter_current_path = viewName;
-            Constants.flutter_session_id = sesisonId;
+            Constants.flutter_session_id = Constants.SESSION_ID;
 
             Constants.setPageTitle(Constants.getPageTitle() == null || Constants.getPageTitle().isEmpty() ? viewName : Constants.getPageTitle());
             Constants.START_SESSION_TIME = System.currentTimeMillis() + "";
@@ -194,6 +216,7 @@ public class TsFlutterPlugin implements FlutterPlugin, MethodCallHandler {
             if (enableSession) {
                 TSAnalyticsSDK.setStartSession();
             }
+            pageView = true;
             result.success(true);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -205,7 +228,7 @@ public class TsFlutterPlugin implements FlutterPlugin, MethodCallHandler {
      * 页面停止
      */
     void eventViewPageStop(MethodChannel.Result result) {
-        if (!init) {
+        if (!pageView) {
             return;
         }
         Constants.END_SESSION_TIME = System.currentTimeMillis() + "";

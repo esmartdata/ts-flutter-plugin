@@ -39,7 +39,7 @@ android {
 
     dependencies {
         // 添加原生sdk依赖
-        implementation 'com.esmartwave.analytics.androidsdk:TrackingSystemSDK:2.0.8'
+        implementation 'com.esmartwave.analytics.androidsdk:TrackingSystemSDK:2.0.9'
         // 添加本地项目依赖
 //        implementation project(':trackingsystemsdk')
     }
